@@ -1,6 +1,6 @@
 # Desafio Android do Jeitto
 
-## Bem vindo ao desafio de Android do Jeitto.
+## Bem-vindo/a ao desafio de Android do Jeitto.
 O objetivo deste desafio é avaliar suas habilidades e conhecimentos de arquiteturas, bibliotecas e ferramentas de desenvolvimento de aplicativos para Android.
 
 Antes de iniciar, leia todo este guia e tenha certeza de que entendeu o desafio proposto. Acima de tudo, tire o máximo de proveito do tempo que gastar com este desafio para aprender e aprimorar seus conhecimentos! Seu esforço não será em vão.

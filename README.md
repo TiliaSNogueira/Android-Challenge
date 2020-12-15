@@ -94,6 +94,7 @@ Se surgir alguma dúvida quanto ao que pode ou não ser usado, não hesite em no
    - O seu README deve ter todas as instruções sobre o que deve ser configurado e como rodar o projeto. 
    - **O código deve compilar e rodar.** Caso as instruções estejam claras, e o projeto não compile, iremos entrar em contato com você. Caso o README esteja sem qualquer instrução sobre como rodar o projeto e ele não compile, não será possível garantir que analisaremos e testaremos o projeto.
    - Todo o código deve ser feito em inglês. 
+   - O projeto deve ser desenvolvido obrigatoriamente na IDE Android Studio.
    - Não faça um PR para este repositório, apenas envie o link para rafael.caetano@jeitto.com.br e/ou fabio.rachid@jeitto.com.br
 
 O que **esperamos** ver:

@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="@id/image_dialog" />
 
     <TextView
-        android:id="@+id/summary_dialog"
+        android:id="@+id/summary_dialog_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20sp"

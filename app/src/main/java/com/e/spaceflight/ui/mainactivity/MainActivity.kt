@@ -1,27 +1,27 @@
 package com.e.spaceflight.ui.mainactivity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.e.spaceflight.ItemDialogFragment
 import com.e.spaceflight.R
 import com.e.spaceflight.repository.service
-import com.e.spaceflight.ui.DialogActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_dialog_error.view.*
 
 
 class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
-//,    ItemDialogFragment.DialogListener
+   // ,ItemDialogFragment.DialogListener
 {
 
     private lateinit var adap: ArticleAdapter
@@ -33,9 +33,6 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
             }
         }
     }
-
-    //lateinit var tituloDaqui: String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,12 +57,9 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
         viewModel.showErrorDialog.observe(this, {
             if (it == true) {
                 showErrorDialog()
-                Log.i("ENTROU NO IF TRUE", it.toString())
             }
         })
-
-
-    }
+   }
 
 
     private fun setProgressBar() {
@@ -90,34 +84,36 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
     }
 
     override fun selectArticle(position: Int) {
-        Toast.makeText(this, "CLICOU NO ITEM", Toast.LENGTH_SHORT).show()
 
         val article = adap.listArticles[position]
 
 
-        val intent = Intent(this, DialogActivity::class.java)
-        intent.putExtra("key", article)
-        startActivity(intent)
+//        Dessa forma, chamamos uma activity com forma de dialog
+//        val intent = Intent(this, DialogActivity::class.java)
+//        intent.putExtra("key", article)
+//        startActivity(intent)
+
+        //Dessa forma chamamos um Dialog Fragment
+        val dialogFrag = ItemDialogFragment()
+        val bundleee = Bundle()
+        bundleee.putSerializable("key", article)
+        dialogFrag.arguments = bundleee
+        dialogFrag.show(supportFragmentManager, "dialog")
 
 
-        // callDialogFragment()
     }
 
-//    override fun onDialogPositiveClick(dialog: DialogFragment) {
-//        TODO("Not yet implemented")
+//    override fun onDialogReadClick(dialog: DialogFragment) {
+//        Log.i("MAINNNNN", "onDialogReadClick: clicou")
+////        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(articleDetails.url))
+////        startActivity(browserIntent)
 //    }
 //
-//    override fun onDialogNegativeClick(dialog: DialogFragment) {
-//        TODO("Not yet implemented")
+//    override fun onDialogReturnClick(dialog: DialogFragment) {
+//        Log.i("MAINNNNN", "onDialogReturnClick: clicou")
+//        //dialog.dismiss()
 //    }
-//
-//
-//
-//    fun callDialogFragment() {
-//        val newFragment = ItemDialogFragment()
-//        newFragment.show(supportFragmentManager, "missiles")
-//
-//    }
+
 
 }
 

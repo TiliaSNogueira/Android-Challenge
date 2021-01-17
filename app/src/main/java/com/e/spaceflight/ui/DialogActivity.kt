@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import com.e.spaceflight.R
 import com.e.spaceflight.model.Article
 import com.squareup.picasso.Picasso
@@ -24,7 +23,7 @@ class DialogActivity : AppCompatActivity() {
 
         val picasso = Picasso.get()
         title_dialog.setText(articleDetails.title)
-        summary_dialog.setText(articleDetails.summary)
+        summary_dialog_item.setText(articleDetails.summary)
         picasso.load(articleDetails.imageUrl).into(image_dialog)
 
         btn_read_dialog.setOnClickListener {

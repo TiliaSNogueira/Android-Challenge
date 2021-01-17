@@ -17,7 +17,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/summary_dialog"
+        android:id="@+id/summary_dialog_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="20sp"

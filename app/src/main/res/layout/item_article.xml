@@ -12,12 +12,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:padding="20sp"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/image_article"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:contentDescription="@string/image_item_article"
             android:scaleType="centerCrop"
@@ -28,13 +27,14 @@
             android:id="@+id/tv_title_article"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15sp"
+            android:layout_margin="15sp"
             android:text="@string/title_item_article"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/image_article"
-            app:layout_constraintTop_toTopOf="@id/image_article" />
+            app:layout_constraintTop_toTopOf="@id/image_article"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/tv_site_article"

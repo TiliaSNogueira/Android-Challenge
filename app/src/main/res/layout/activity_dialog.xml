@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light">
+
+    <ImageView
+        android:id="@+id/image_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="300sp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20sp"
+        android:text="Título "
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/image_dialog"
+        app:layout_constraintTop_toTopOf="@id/image_dialog" />
+
+    <TextView
+        android:id="@+id/summary_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20sp"
+        android:text="Descrição "
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@id/title_dialog"
+        app:layout_constraintStart_toStartOf="@id/title_dialog"
+        app:layout_constraintTop_toBottomOf="@id/image_dialog" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10sp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/btn_return_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:clickable="true"
+            android:padding="10dp"
+            android:text="VOLTAR"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_read_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#F13F3F"
+            android:padding="10dp"
+            android:text="LER ARTIGO"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

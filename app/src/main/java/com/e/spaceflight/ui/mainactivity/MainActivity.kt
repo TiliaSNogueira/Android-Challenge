@@ -1,5 +1,6 @@
 package com.e.spaceflight.ui.mainactivity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,19 +9,20 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.e.spaceflight.ItemDialogFragment
 import com.e.spaceflight.R
 import com.e.spaceflight.repository.service
+import com.e.spaceflight.ui.DialogActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_dialog_error.view.*
 
 
-class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
-    ItemDialogFragment.DialogListener {
+class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
+//,    ItemDialogFragment.DialogListener
+{
 
     private lateinit var adap: ArticleAdapter
     private lateinit var llmanager: LinearLayoutManager
@@ -31,6 +33,8 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
             }
         }
     }
+
+    //lateinit var tituloDaqui: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,8 +65,6 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
         })
 
 
-
-
     }
 
 
@@ -88,22 +90,34 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
     }
 
     override fun selectArticle(position: Int) {
-        Toast.makeText(this, "mCLICOU NO ITEM", Toast.LENGTH_SHORT).show()
-        callDialogFragment()
+        Toast.makeText(this, "CLICOU NO ITEM", Toast.LENGTH_SHORT).show()
+
+        val article = adap.listArticles[position]
+
+
+        val intent = Intent(this, DialogActivity::class.java)
+        intent.putExtra("key", article)
+        startActivity(intent)
+
+
+        // callDialogFragment()
     }
 
-    override fun onDialogPositiveClick(dialog: DialogFragment) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onDialogNegativeClick(dialog: DialogFragment) {
-        TODO("Not yet implemented")
-    }
-
-    fun callDialogFragment() {
-        val newFragment = ItemDialogFragment()
-        newFragment.show(supportFragmentManager, "missiles")
-    }
+//    override fun onDialogPositiveClick(dialog: DialogFragment) {
+//        TODO("Not yet implemented")
+//    }
+//
+//    override fun onDialogNegativeClick(dialog: DialogFragment) {
+//        TODO("Not yet implemented")
+//    }
+//
+//
+//
+//    fun callDialogFragment() {
+//        val newFragment = ItemDialogFragment()
+//        newFragment.show(supportFragmentManager, "missiles")
+//
+//    }
 
 }
 

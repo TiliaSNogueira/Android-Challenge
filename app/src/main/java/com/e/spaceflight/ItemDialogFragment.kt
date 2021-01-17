@@ -4,14 +4,24 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import kotlinx.android.synthetic.main.dialog_fragment_item.*
+import kotlinx.android.synthetic.main.dialog_fragment_item.view.*
 
 class ItemDialogFragment : DialogFragment() {
 
-    internal lateinit var listener: DialogListener
+    private lateinit var listener: DialogListener
+
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
+
+
+
+
+
 
             val builder = AlertDialog.Builder(it)
             // Get the layout inflater
@@ -19,7 +29,13 @@ class ItemDialogFragment : DialogFragment() {
 
             // Inflate and set the layout for the dialog
             // Pass null as the parent view because its going in the dialog layout
-            builder.setView(inflater.inflate(R.layout.dialog_fragment_item, null))
+            val dialogLayout = inflater.inflate(R.layout.dialog_fragment_item, null)
+
+
+
+
+            builder.setView(dialogLayout)
+
 
 
 
@@ -49,4 +65,8 @@ class ItemDialogFragment : DialogFragment() {
             )
         }
     }
+
+
+
+
 }

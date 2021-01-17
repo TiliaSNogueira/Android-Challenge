@@ -1,10 +1,15 @@
 package com.e.spaceflight.ui
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.e.spaceflight.R
+import com.e.spaceflight.model.Article
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_dialog.*
+
 //activity pequena, se foir usar ela mesmo, fazer o bundle
 class DialogActivity : AppCompatActivity() {
 
@@ -14,7 +19,27 @@ class DialogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog)
 
-        val resposta = intent.extras
-        Toast.makeText(this, resposta.toString(), Toast.LENGTH_SHORT).show()
+
+        val articleDetails = intent.getSerializableExtra("key") as Article
+
+        val picasso = Picasso.get()
+        title_dialog.setText(articleDetails.title)
+        summary_dialog.setText(articleDetails.summary)
+        picasso.load(articleDetails.imageUrl).into(image_dialog)
+
+        btn_read_dialog.setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(articleDetails.url))
+            startActivity(browserIntent)
+        }
+
+        btn_return_dialog.setOnClickListener {
+            finish()
+        }
+
+
+
+
+
+
     }
 }

@@ -1,7 +1,5 @@
 package com.e.spaceflight.ui.mainactivity
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,23 +7,29 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.e.spaceflight.ItemDialogFragment
 import com.e.spaceflight.R
+import com.e.spaceflight.model.Article
 import com.e.spaceflight.repository.service
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_dialog_error.view.*
 
 
 class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
-   // ,ItemDialogFragment.DialogListener
+// ,ItemDialogFragment.DialogListener
 {
 
+    lateinit var listRefresh : ArrayList<Article>
+
+   // val _limit = 15
+    var _start = 0
     private lateinit var adap: ArticleAdapter
     private lateinit var llmanager: LinearLayoutManager
+
     private val viewModel by viewModels<MainViewModel> {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -49,9 +53,16 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
         recycler.adapter = adap
 
 
-        viewModel.getAllArticles()
+        viewModel.getAllArticles(_start
+              //  , _limit
+        )
+
+        listRefresh = arrayListOf()
+
         viewModel.listArticles.observe(this, {
-            adap.setData(it)
+            listRefresh.addAll(it)
+            adap.setData(listRefresh)
+            Log.i("VIEWMODEL OBSERVE", listRefresh.toString())
         })
 
         viewModel.showErrorDialog.observe(this, {
@@ -59,7 +70,35 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
                 showErrorDialog()
             }
         })
-   }
+
+
+         setScrollView(recycler)
+    }
+
+    private fun setScrollView(view: View) {
+        recycler_main?.run {
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val adapItens = adap?.itemCount
+
+                    val currentItens = llmanager?.childCount
+                    val pastItens = llmanager?.findFirstVisibleItemPosition()
+                    val lastItenVisible = llmanager.findLastVisibleItemPosition()
+
+                    if (lastItenVisible == adapItens - 1) {
+                        _start += 15
+                        Log.i("ENTROU IF DO SCROLL", _start.toString())
+                        viewModel.getAllArticles(_start
+                                //, _limit
+                    )
+
+                    }
+                }
+            })
+        }
+    }
 
 
     private fun setProgressBar() {

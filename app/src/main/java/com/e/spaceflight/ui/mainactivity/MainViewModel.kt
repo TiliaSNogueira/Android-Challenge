@@ -6,12 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.e.spaceflight.model.Article
 import com.e.spaceflight.repository.Service
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class MainViewModel(val service: Service) : ViewModel() {
 
-    val listArticles = MutableLiveData<List<Article>>()
+    val listArticles = MutableLiveData<ArrayList<Article>>()
 
     var manageProgressBar = MutableLiveData<String>()
 
@@ -19,17 +20,22 @@ class MainViewModel(val service: Service) : ViewModel() {
 
 
 
-    fun getAllArticles() {
+    fun getAllArticles(
+           // _limit: Int,
+            _start : Int) {
 
         manageProgressBar.value = "start"
 
-
         viewModelScope.launch {
             try {
-                listArticles.value = service.getArticlesAPI()
+                listArticles.value = service.getArticlesAPI(
+                       // _limit,
+                _start
+                )
                 showErrorDialog.value = false
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Erro ao acessar repositorio")
+                Log.e("MainViewModel", e.toString())
                 showErrorDialog.value = true
             }
             manageProgressBar.value = "finish"

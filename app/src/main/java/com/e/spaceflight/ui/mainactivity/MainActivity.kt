@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
         recycler.setHasFixedSize(true)
         recycler.adapter = adap
 
-        viewModel.getAllArticles(_start)
+        viewModel.getAllArticles(_limit, _start)
 
         viewModel.listArticles.observe(this, {
             //listRefresh = it
@@ -92,11 +92,8 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
                         Log.i("ENTROU NO IF DO PAG", pagScrol.toString())
                         if (lastItenVisible == adapItens - 1) {
                             _start += 15
-                            Log.i("ENTROU IF DO SCROLL", _start.toString())
-                            viewModel.getAllArticles(_start
-                                    //, _limit
-                            )
-
+                            Log.i("COM 2 QUERYS", _start.toString())
+                            viewModel.getAllArticles(_limit, _start)
                         }
                     }
                 }

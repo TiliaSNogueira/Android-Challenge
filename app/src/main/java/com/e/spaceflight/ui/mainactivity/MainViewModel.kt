@@ -19,18 +19,17 @@ class MainViewModel(val service: Service) : ViewModel() {
     var showErrorDialog = MutableLiveData<Boolean>()
 
 
-
     fun getAllArticles(
-           //_limit: Int,
-            _start : Int
-            ) {
+            _limit: Int,
+            _start: Int
+    ) {
 
         manageProgressBar.value = "start"
 
         viewModelScope.launch {
             try {
                 listArticles.value = service.getArticlesAPI(
-                    //  _limit,
+                        _limit,
                         _start
                 )
                 showErrorDialog.value = false

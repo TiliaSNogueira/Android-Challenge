@@ -21,16 +21,17 @@ class MainViewModel(val service: Service) : ViewModel() {
 
 
     fun getAllArticles(
-           // _limit: Int,
-            _start : Int) {
+           //_limit: Int,
+            _start : Int
+            ) {
 
         manageProgressBar.value = "start"
 
         viewModelScope.launch {
             try {
                 listArticles.value = service.getArticlesAPI(
-                       // _limit,
-                _start
+                    //  _limit,
+                        _start
                 )
                 showErrorDialog.value = false
             } catch (e: Exception) {

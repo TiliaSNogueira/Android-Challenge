@@ -10,8 +10,8 @@ interface Service {
 
     @GET("api/v2/articles")
     suspend fun getArticlesAPI(
-           // @Query("_limit") _limit: Int,
-            @Query("_start") _start: Int,
+         // @Query("_limit") _limit: Int,
+          @Query("_start") _start: Int
     ): ArrayList<Article>
 }
 

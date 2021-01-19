@@ -7,6 +7,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,18 +18,23 @@ import com.e.spaceflight.model.Article
 import com.e.spaceflight.repository.service
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_dialog_error.view.*
+import javax.security.auth.login.LoginException
+import kotlin.math.log
 
 
-class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
-// ,ItemDialogFragment.DialogListener
-{
+class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener, SearchView.OnQueryTextListener, android.widget.SearchView.OnQueryTextListener {
 
-    lateinit var listRefresh : ArrayList<Article>
+    var listRefresh: ArrayList<Article> = arrayListOf()
 
-   // val _limit = 15
+    //quantidade de articles retornados (15)
+    var _limit = 15
+
+    //pula uma quantidade de articles quando faz requisição
     var _start = 0
     private lateinit var adap: ArticleAdapter
     private lateinit var llmanager: LinearLayoutManager
+
+    var pagScrol = 0
 
     private val viewModel by viewModels<MainViewModel> {
         object : ViewModelProvider.Factory {
@@ -52,17 +58,12 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
         recycler.setHasFixedSize(true)
         recycler.adapter = adap
 
-
-        viewModel.getAllArticles(_start
-              //  , _limit
-        )
-
-        listRefresh = arrayListOf()
+        viewModel.getAllArticles(_start)
 
         viewModel.listArticles.observe(this, {
+            //listRefresh = it
             listRefresh.addAll(it)
             adap.setData(listRefresh)
-            Log.i("VIEWMODEL OBSERVE", listRefresh.toString())
         })
 
         viewModel.showErrorDialog.observe(this, {
@@ -71,8 +72,11 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
             }
         })
 
+        setScrollView(recycler)
 
-         setScrollView(recycler)
+        val searchView = search_main
+        searchView.setOnQueryTextListener(this)
+
     }
 
     private fun setScrollView(view: View) {
@@ -82,18 +86,18 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
                     super.onScrolled(recyclerView, dx, dy)
 
                     val adapItens = adap?.itemCount
-
-                    val currentItens = llmanager?.childCount
-                    val pastItens = llmanager?.findFirstVisibleItemPosition()
                     val lastItenVisible = llmanager.findLastVisibleItemPosition()
 
-                    if (lastItenVisible == adapItens - 1) {
-                        _start += 15
-                        Log.i("ENTROU IF DO SCROLL", _start.toString())
-                        viewModel.getAllArticles(_start
-                                //, _limit
-                    )
+                    if (pagScrol == 0) {
+                        Log.i("ENTROU NO IF DO PAG", pagScrol.toString())
+                        if (lastItenVisible == adapItens - 1) {
+                            _start += 15
+                            Log.i("ENTROU IF DO SCROLL", _start.toString())
+                            viewModel.getAllArticles(_start
+                                    //, _limit
+                            )
 
+                        }
                     }
                 }
             })
@@ -134,25 +138,41 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener
 
         //Dessa forma chamamos um Dialog Fragment
         val dialogFrag = ItemDialogFragment()
-        val bundleee = Bundle()
-        bundleee.putSerializable("key", article)
-        dialogFrag.arguments = bundleee
+        val bundle = Bundle()
+        bundle.putSerializable("key", article)
+        dialogFrag.arguments = bundle
         dialogFrag.show(supportFragmentManager, "dialog")
 
 
     }
 
-//    override fun onDialogReadClick(dialog: DialogFragment) {
-//        Log.i("MAINNNNN", "onDialogReadClick: clicou")
-////        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(articleDetails.url))
-////        startActivity(browserIntent)
-//    }
-//
-//    override fun onDialogReturnClick(dialog: DialogFragment) {
-//        Log.i("MAINNNNN", "onDialogReturnClick: clicou")
-//        //dialog.dismiss()
-//    }
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        pagScrol = 1
 
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        pagScrol = 1
+
+        Log.i("ONQUERY listRefresh", listRefresh.toString())
+
+        val filterList = listRefresh.filter { it.title.contains(newText.toString(), ignoreCase = true) }
+        Log.i("ONQUERY filterList", filterList.toString())
+
+        adap.setData(filterList as ArrayList<Article>)
+        Log.i("FILTRO p/ ADAPTER ", filterList.toString())
+
+
+        //se faz algo como clear nem aparece primeiro
+
+        adap.listArticles = filterList
+        adap.notifyDataSetChanged()
+        adap.setData(adap.listArticles)
+        Log.i("mandando fil p/ adap", adap.listArticles.toString())
+
+        return true
+    }
 
 }
 

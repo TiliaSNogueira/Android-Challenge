@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_article.view.*
 
 class ArticleAdapter(val listener: ArticleOnClickListener) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
-    var listArticles = listOf<Article>()
+    var listArticles = arrayListOf<Article>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,8 +44,8 @@ class ArticleAdapter(val listener: ArticleOnClickListener) : RecyclerView.Adapte
         fun selectArticle(position: Int)
     }
 
-    fun setData(article: List<Article>) {
-        this.listArticles = article
+    fun setData(newList: ArrayList<Article>) {
+        this.listArticles = newList
         notifyDataSetChanged()
 
     }

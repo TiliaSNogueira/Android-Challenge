@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="250sp"
             app:layout_constraintBottom_toTopOf="@id/ll_dialog_fragmentt_buttons"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ll_dialog_fragmentt_buttons"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image_dialog">
 

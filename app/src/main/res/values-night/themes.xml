@@ -13,11 +13,4 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-
-    <!-- custom dialog activity theme -->
-    <style name="AppTheme.Dialog" parent="Base.Theme.AppCompat.Light.Dialog.FixedSize">
-        <!-- removing the dialog's action bar -->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
 </resources>

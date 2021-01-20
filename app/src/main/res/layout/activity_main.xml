@@ -48,7 +48,7 @@
             android:id="@+id/search_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8sp"
+            android:layout_margin="5sp"
             android:background="@color/light" />
 
 

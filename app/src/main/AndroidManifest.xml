@@ -11,25 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SpaceFlight">
-
-
-
-        <activity
-            android:name=".ui.DialogActivity"
-            android:theme="@style/Theme.AppCompat.Dialog">
-
-        </activity>
-
-
-
-
-
         <activity android:name=".ui.mainactivity.MainActivity" />
-
         <activity android:name=".ui.splash.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

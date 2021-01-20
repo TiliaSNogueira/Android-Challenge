@@ -10,6 +10,9 @@ import java.util.concurrent.TimeUnit
 
 interface Service {
 
+    //_limit => quantidade de articles retornados (15)
+    //_start => quantidade de articles pulados quando faz requisição (para paginação)
+
     @GET("api/v2/articles")
     suspend fun getArticlesAPI(
              @Query("_limit") _limit: Int,
@@ -17,11 +20,11 @@ interface Service {
     ): ArrayList<Article>
 }
 
-var client = OkHttpClient.Builder()
+var client: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(100, TimeUnit.SECONDS)
         .readTimeout(100, TimeUnit.SECONDS).build()
 
-val retrofit = Retrofit.Builder()
+val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://spaceflightnewsapi.net/")
         .client(client)
         .addConverterFactory(GsonConverterFactory.create()).build()

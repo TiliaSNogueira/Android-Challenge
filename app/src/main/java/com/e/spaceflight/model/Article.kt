@@ -1,11 +1,8 @@
 package com.e.spaceflight.model
 
-
 import java.io.Serializable
 
-
 data class Article(
-
     val id: String,
     val title: String,
     val url: String,
@@ -14,9 +11,5 @@ data class Article(
     val summary: String,
     val publishedAt: String,
     val updatedAt: String,
-    val featured: Boolean,
-    // val launches : List<String>,
-    // val events : List<String>
-
-
+    val featured: Boolean
 ) : Serializable

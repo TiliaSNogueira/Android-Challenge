@@ -7,4 +7,5 @@
     <string name="title_error_dialog">Não foi possível carregar as notícias</string>
     <string name="message_error_dialog">An internal server error occurred</string>
     <string name="test_button_error_dialog">OK</string>
+    <string name="splash_title">Spaceflight</string>
 </resources>

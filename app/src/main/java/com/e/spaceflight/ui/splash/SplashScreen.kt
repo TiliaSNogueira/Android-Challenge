@@ -1,8 +1,8 @@
 package com.e.spaceflight.ui.splash
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.e.spaceflight.R
 import com.e.spaceflight.ui.mainactivity.MainActivity
 import kotlinx.coroutines.CoroutineScope
@@ -19,8 +19,6 @@ class SplashScreen : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
 
         callMainActivity()
-
-
     }
 
     private fun callMainActivity() {

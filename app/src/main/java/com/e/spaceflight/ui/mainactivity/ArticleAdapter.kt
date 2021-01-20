@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.e.spaceflight.R
 import com.e.spaceflight.model.Article
 import com.squareup.picasso.Picasso
@@ -15,49 +16,42 @@ class ArticleAdapter(val listener: ArticleOnClickListener) : RecyclerView.Adapte
 
     var listArticles = arrayListOf<Article>()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_article, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.item_article, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val currentArticle = listArticles[position]
-
-        val picasso = Picasso.get()
         holder.titleArticle.text = currentArticle.title
         holder.siteArticle.text = currentArticle.newsSite
 
-        picasso.load(currentArticle.imageUrl).into(holder.imageArticle)
+        Glide.with(holder.imageArticle)
+                .load(currentArticle.imageUrl)
+                .circleCrop()
+                .into(holder.imageArticle)
 
         holder.itemView.setOnClickListener {
             listener.selectArticle(position)
         }
-
     }
 
     override fun getItemCount() = listArticles.size
 
-    interface ArticleOnClickListener{
+    interface ArticleOnClickListener {
         fun selectArticle(position: Int)
     }
 
     fun setData(newList: ArrayList<Article>) {
         this.listArticles = newList
         notifyDataSetChanged()
-
     }
 
-
-
     class ViewHolder(item: View) : RecyclerView.ViewHolder(item) {
-
         val imageArticle: ImageView = item.image_article
         val titleArticle: TextView = item.tv_title_article
         val siteArticle: TextView = item.tv_site_article
-
-
     }
 }

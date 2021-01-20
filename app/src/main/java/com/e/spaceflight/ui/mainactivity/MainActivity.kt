@@ -1,40 +1,36 @@
 package com.e.spaceflight.ui.mainactivity
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.e.spaceflight.ItemDialogFragment
 import com.e.spaceflight.R
 import com.e.spaceflight.model.Article
 import com.e.spaceflight.repository.service
+import com.e.spaceflight.ui.dialog.DialogFragmentError
+import com.e.spaceflight.ui.dialog.DialogFragmentItemArticle
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.custom_dialog_error.view.*
-import javax.security.auth.login.LoginException
-import kotlin.math.log
-
 
 class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener, SearchView.OnQueryTextListener, android.widget.SearchView.OnQueryTextListener {
 
-    var listRefresh: ArrayList<Article> = arrayListOf()
+    var listArticles: ArrayList<Article> = arrayListOf()
 
-    //quantidade de articles retornados (15)
+    //parametros para a requisição à API
     var _limit = 15
-
-    //pula uma quantidade de articles quando faz requisição
     var _start = 0
+
     private lateinit var adap: ArticleAdapter
     private lateinit var llmanager: LinearLayoutManager
 
-    var pagScrol = 0
+    //flag para controlar a paginação
+    //quando está filtrando, o tamanho da lista do adapter diminui, então fazia nova requisição automaticamente e aparecia logo abaixo dos itens filtrados
+    //com isso, podemos controlar se é pra fazer nova requisição ou não
+    var flagPag = 0
 
     private val viewModel by viewModels<MainViewModel> {
         object : ViewModelProvider.Factory {
@@ -61,9 +57,8 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
         viewModel.getAllArticles(_limit, _start)
 
         viewModel.listArticles.observe(this, {
-            //listRefresh = it
-            listRefresh.addAll(it)
-            adap.setData(listRefresh)
+            listArticles.addAll(it)
+            adap.setData(listArticles)
         })
 
         viewModel.showErrorDialog.observe(this, {
@@ -72,11 +67,18 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
             }
         })
 
+        //função que vai fazer nova requisição conforme os items forem sendo deslizados pela tela
         setScrollView(recycler)
 
+        //configurando a pesquisa
+        callSearch()
+
+    }
+
+
+    private fun callSearch() {
         val searchView = search_main
         searchView.setOnQueryTextListener(this)
-
     }
 
     private fun setScrollView(view: View) {
@@ -85,14 +87,12 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
-                    val adapItens = adap?.itemCount
+                    val adapItens = adap.itemCount
                     val lastItenVisible = llmanager.findLastVisibleItemPosition()
 
-                    if (pagScrol == 0) {
-                        Log.i("ENTROU NO IF DO PAG", pagScrol.toString())
+                    if (flagPag == 0) {
                         if (lastItenVisible == adapItens - 1) {
                             _start += 15
-                            Log.i("COM 2 QUERYS", _start.toString())
                             viewModel.getAllArticles(_limit, _start)
                         }
                     }
@@ -100,7 +100,6 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
             })
         }
     }
-
 
     private fun setProgressBar() {
         viewModel.manageProgressBar.observe(this, {
@@ -113,64 +112,37 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
     }
 
     private fun showErrorDialog() {
-        val customDialog = LayoutInflater.from(this).inflate(R.layout.custom_dialog_error, null)
-        customDialog.btn_error_dialog.setOnClickListener {
-            this.finishAffinity()
-        }
-
-        val builder = AlertDialog.Builder(this)
-        builder.setView(customDialog)
-        builder.create().show()
+        val errorDialog = DialogFragmentError()
+        errorDialog.show(supportFragmentManager, "error")
     }
 
     override fun selectArticle(position: Int) {
-
         val article = adap.listArticles[position]
 
-
-//        Dessa forma, chamamos uma activity com forma de dialog
-//        val intent = Intent(this, DialogActivity::class.java)
-//        intent.putExtra("key", article)
-//        startActivity(intent)
-
-        //Dessa forma chamamos um Dialog Fragment
-        val dialogFrag = ItemDialogFragment()
+        //Chama o Dialog Fragment e passa o article clicado para ele poder exibir os dados
+        val dialogFrag = DialogFragmentItemArticle()
         val bundle = Bundle()
         bundle.putSerializable("key", article)
         dialogFrag.arguments = bundle
         dialogFrag.show(supportFragmentManager, "dialog")
-
-
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        pagScrol = 1
-
+        flagPag = 1
         return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        pagScrol = 1
+        flagPag = 1
 
-        Log.i("ONQUERY listRefresh", listRefresh.toString())
-
-        val filterList = listRefresh.filter { it.title.contains(newText.toString(), ignoreCase = true) }
-        Log.i("ONQUERY filterList", filterList.toString())
-
+        //pega a lista que recebeu como resposta da requisição, filtra e passa pro adapter
+        val filterList = listArticles.filter { it.title.contains(newText.toString(), ignoreCase = true) }
         adap.setData(filterList as ArrayList<Article>)
-        Log.i("FILTRO p/ ADAPTER ", filterList.toString())
-
-
-        //se faz algo como clear nem aparece primeiro
-
         adap.listArticles = filterList
-        adap.notifyDataSetChanged()
         adap.setData(adap.listArticles)
-        Log.i("mandando fil p/ adap", adap.listArticles.toString())
 
         return true
     }
-
 }
 
 

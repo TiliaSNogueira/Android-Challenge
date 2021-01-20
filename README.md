@@ -1,9 +1,9 @@
-## Space Flight
+# Space Flight
 
-# Aplicativo que lista notícias relacionadas à exploração espacial consumindo dados da Spaceflight News API. 
+## Aplicativo que lista notícias relacionadas à exploração espacial consumindo dados da Spaceflight News API. 
 
 
-#Apresentação do aplicativo:
+## Apresentação do aplicativo:
 O aplicativo é composto de 2 activities (uma tela de abertura e uma tela principal).
 Quando o usuário abre o aplicativo, a tela de abertura é exibida durante 2 segundos e em seguida a tela principal é exibida.
 
@@ -14,7 +14,7 @@ No quesito interação com a lista, temos seguintes comportamentos:
 2. Pesquisa : ao clicar na barra de pesquisa, a lista é filtrada, exibindo os itens cujo título contém as letras digitadas na barra.
 3. Rolagem : a requisição foi configurada pra buscar 15 notícias por vez, então quando o usuário desliza a lista para baixo é necessário trazer mais notícias além das 15 primeiras. Cada vez que a lista exibe um último item desse conjunto de 15 notícias, é feita uma nova requisição, e mais 15 notícias são buscadas. Isso permite que o usuário tenha acesso a uma lista "infinita".
 
-# Tecnologias usadas: 
+## Tecnologias usadas: 
 - Kotlin
 - MVVM
 - Retrofit para requisição à API

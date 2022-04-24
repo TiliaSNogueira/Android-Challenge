@@ -13,7 +13,8 @@ interface Service {
     //_limit => quantidade de articles retornados (15)
     //_start => quantidade de articles pulados quando faz requisição (para paginação)
 
-    @GET("api/v2/articles")
+   // @GET("api/v3/articles")
+    @GET("articles")
     suspend fun getArticlesAPI(
              @Query("_limit") _limit: Int,
             @Query("_start") _start: Int
@@ -25,7 +26,8 @@ var client: OkHttpClient = OkHttpClient.Builder()
         .readTimeout(100, TimeUnit.SECONDS).build()
 
 val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("https://spaceflightnewsapi.net/")
+        //.baseUrl("https://spaceflightnewsapi.net/")
+        .baseUrl("https://api.spaceflightnewsapi.net/v3/")
         .client(client)
         .addConverterFactory(GsonConverterFactory.create()).build()
 

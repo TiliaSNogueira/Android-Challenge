@@ -1,11 +1,15 @@
 package com.e.spaceflight.ui.mainactivity
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.e.spaceflight.AppDatabase
 import com.e.spaceflight.model.Article
+import com.e.spaceflight.repository.ArticleRepository
 import com.e.spaceflight.repository.Service
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(val service: Service) : ViewModel() {
@@ -32,4 +36,5 @@ class MainViewModel(val service: Service) : ViewModel() {
             manageProgressBar.value = "finish"
         }
     }
+
 }

@@ -7,18 +7,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.e.spaceflight.ArticleViewModel
 import com.e.spaceflight.R
 import com.e.spaceflight.model.Article
 import com.e.spaceflight.repository.service
 import com.e.spaceflight.ui.dialog.DialogFragmentError
 import com.e.spaceflight.ui.dialog.DialogFragmentItemArticle
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener, SearchView.OnQueryTextListener, android.widget.SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
+    ArticleAdapter.ArticleSaveOnClickListener,
+    ArticleAdapter.ArticleDeleteOnClickListener,
+    SearchView.OnQueryTextListener, android.widget.SearchView.OnQueryTextListener {
 
     var listArticles: ArrayList<Article> = arrayListOf()
+
 
     //parametros para a requisição à API
     var _limit = 15
@@ -40,14 +48,29 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
         }
     }
 
+    private val articleViewModel by viewModels<ArticleViewModel> {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return ArticleViewModel(application) as T
+            }
+        }
+    }
+
+  // private lateinit var articleViewModel: ArticleViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //articleViewModel = ViewModelProvider(this).get(ArticleViewModel::class.java)
+
+
+
         setProgressBar()
 
         llmanager = LinearLayoutManager(this)
-        adap = ArticleAdapter(this)
+        adap = ArticleAdapter(this, this, this)
 
         val recycler = recycler_main
         recycler.layoutManager = llmanager
@@ -73,8 +96,8 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
         //configurando a pesquisa
         callSearch()
 
-    }
 
+    }
 
     private fun callSearch() {
         val searchView = search_main
@@ -136,13 +159,37 @@ class MainActivity : AppCompatActivity(), ArticleAdapter.ArticleOnClickListener,
         flagPag = 1
 
         //pega a lista que recebeu como resposta da requisição, filtra e passa pro adapter
-        val filterList = listArticles.filter { it.title.contains(newText.toString(), ignoreCase = true) }
+        val filterList =
+            listArticles.filter { it.title.contains(newText.toString(), ignoreCase = true) }
         adap.setData(filterList as ArrayList<Article>)
         adap.listArticles = filterList
         adap.setData(adap.listArticles)
 
         return true
     }
+
+    override fun saveFavorite(position: Int) {
+        val article = adap.listArticles[position]
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            articleViewModel.saveArticle(article)
+        }
+
+
+
+    }
+
+    override fun deleteFavorite(position: Int) {
+        val article = adap.listArticles[position]
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            articleViewModel.deleteArticle(article)
+        }
+
+
+    }
+
+
 }
 
 

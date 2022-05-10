@@ -7,12 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.e.spaceflight.ArticleDao
 import com.e.spaceflight.R
 import com.e.spaceflight.model.Article
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_article.view.*
 
-class ArticleAdapter(val listener: ArticleOnClickListener) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
+class ArticleAdapter(val listener: ArticleOnClickListener, val saveListener: ArticleSaveOnClickListener, val deleteListener: ArticleDeleteOnClickListener) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
     var listArticles = arrayListOf<Article>()
 
@@ -36,12 +37,33 @@ class ArticleAdapter(val listener: ArticleOnClickListener) : RecyclerView.Adapte
         holder.itemView.setOnClickListener {
             listener.selectArticle(position)
         }
+        var favorite = false
+
+        holder.itemView.star_favorite.setOnClickListener {
+            if(!favorite) {
+                saveListener.saveFavorite(position)
+                holder.itemView.star_favorite.setImageResource(R.drawable.ic_baseline_star_24)
+                favorite = true
+            } else {
+                deleteListener.deleteFavorite(position)
+                holder.itemView.star_favorite.setImageResource(R.drawable.ic_baseline_star_border_24)
+                favorite = false
+            }
+        }
     }
 
     override fun getItemCount() = listArticles.size
 
     interface ArticleOnClickListener {
         fun selectArticle(position: Int)
+    }
+
+    interface ArticleSaveOnClickListener {
+         fun saveFavorite(position: Int)
+    }
+
+    interface ArticleDeleteOnClickListener {
+         fun deleteFavorite(position: Int)
     }
 
     fun setData(newList: ArrayList<Article>) {
